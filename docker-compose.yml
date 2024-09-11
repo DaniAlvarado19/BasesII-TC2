@@ -1,0 +1,62 @@
+version: "3.9"
+
+x-service-environment: &common-variables
+    HADR_PORT: 5022
+    INIT_WAIT: 40
+    ACCEPT_EULA: 'Y'
+    IS_AOAG_PRIMARY: False
+    SA_PASSWORD: ${SA_PASSWORD}
+    MASTER_KEY_PASSWORD: ${MASTER_KEY_PASSWORD}
+    HADR_LOGIN_PASSWORD: ${HADR_LOGIN_PASSWORD}
+    HADR_CERT_PASSWORD: ${HADR_CERT_PASSWORD}
+    SHARED_PATH: ${SHARED_PATH}
+    BACKUP_PATH: ${BACKUP_PATH}
+
+services:
+
+    db1:
+        container_name: db1
+        hostname: db1
+        build: 
+            context: .\sql
+            args:
+                - INSTALL_TOOLS=${INSTALL_TOOLS}
+        environment:
+            <<: *common-variables
+            IS_AOAG_PRIMARY: True
+            TCP_PORT: ${DB1_TCP_PORT}
+            PARTNER_HOSTNAME: db2
+        ports:
+            - ${DB1_TCP_PORT}:${DB1_TCP_PORT}
+        volumes:
+            - mssql-server-shared:${SHARED_PATH}
+            - mssql-server-backup:${BACKUP_PATH}
+        networks:
+            - sqlaoag
+
+    db2:
+        container_name: db2
+        hostname: db2
+        build: 
+            context: .\sql
+            args:
+                - INSTALL_TOOLS=${INSTALL_TOOLS}
+        environment:
+            <<: *common-variables
+            INIT_WAIT: 60
+            TCP_PORT: ${DB2_TCP_PORT}
+        ports:
+            - ${DB2_TCP_PORT}:${DB2_TCP_PORT}
+        volumes:
+            - mssql-server-shared:${SHARED_PATH}
+            - mssql-server-backup:${BACKUP_PATH}
+        depends_on:
+            - db1
+        networks:
+            - sqlaoag
+
+volumes:
+    mssql-server-shared:
+    mssql-server-backup:
+networks:
+    sqlaoag:
