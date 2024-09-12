@@ -96,32 +96,19 @@ N''db2'' WITH
 --execute creation of AOAG
 exec sp_executesql @cmd
 
-
-USE [master]
-GO
-
---create sample database
-PRINT 'CREATING DATABASE'
-CREATE DATABASE Sales
-GO
-USE [SALES]
-GO
-CREATE TABLE CUSTOMER([CustomerID] [int] NOT NULL, [SalesAmount] [decimal] NOT NULL)
-INSERT INTO CUSTOMER (CustomerID, SalesAmount) VALUES (1,100),(2,200),(3,300)
-
 USE [master]
 GO
 
 --change recovery model and take full backup for db to meet requirements of AOAG
 PRINT 'CHANGING DB RECOVERY MODEL'
-ALTER DATABASE [SALES] SET RECOVERY FULL ;
+ALTER DATABASE [AdventureWorks2019] SET RECOVERY FULL ;
 
 PRINT 'BACKING UP DATABASE'
-BACKUP DATABASE [Sales] TO  DISK = N'/var/opt/mssql/backup/Sales.bak' WITH NOFORMAT, NOINIT,  NAME = N'Sales-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10
+BACKUP DATABASE [AdventureWorks2019] TO  DISK = N'/var/opt/mssql/backup/AdventureWorks2019.bak' WITH NOFORMAT, NOINIT,  NAME = N'AdventureWorks2019-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10
 
 --wait a bit and add database to AG
 
 WAITFOR DELAY '00:00:10'
 PRINT 'ADDING DB TO AG'
-ALTER AVAILABILITY GROUP [AG1] ADD DATABASE [SALES]
+ALTER AVAILABILITY GROUP [AG1] ADD DATABASE [AdventureWorks2019]
 GO
