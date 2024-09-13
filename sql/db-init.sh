@@ -1,4 +1,10 @@
 #wait for the SQL Server to come up
+
+while pgrep -f restore.sh > /dev/null; do
+  echo "Esperando a que restore.sh termine..."
+  sleep 5
+done
+
 SLEEP_TIME=$INIT_WAIT
 SQL_SCRIPT=$INIT_SCRIPT
 
@@ -32,7 +38,7 @@ do
         break
     else
         echo "AOG not ready yet..."
-        sleep 2
+        sleep 10
     fi
 done
 echo "#######      AOAG script execution completed     #######"
