@@ -101,10 +101,12 @@ GO
 
 --change recovery model and take full backup for db to meet requirements of AOAG
 PRINT 'CHANGING DB RECOVERY MODEL'
-ALTER DATABASE [AdventureWorks2019] SET RECOVERY FULL ;
+ALTER DATABASE [AdventureWorks2019] SET RECOVERY FULL;
+GO
 
 PRINT 'BACKING UP DATABASE'
-BACKUP DATABASE [AdventureWorks2019] TO  DISK = N'/var/opt/mssql/backup/AdventureWorks2019.bak' WITH NOFORMAT, NOINIT,  NAME = N'AdventureWorks2019-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10
+BACKUP DATABASE [AdventureWorks2019] TO  DISK = N'/var/opt/mssql/backup/AdventureWorks2019.bak' WITH NOFORMAT, NOINIT,  NAME = N'AdventureWorks2019-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10;
+GO
 
 --wait a bit and add database to AG
 

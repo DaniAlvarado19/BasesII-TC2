@@ -14,7 +14,6 @@ SET @hadr_login_password = '$(HADR_LOGIN_PASSWORD)'
 SET @cert_password = '$(HADR_CERT_PASSWORD)'
 SET @hadr_port = '$(HADR_PORT)'
 
-
 --create login for aoag
 -- command only accepts string literals so using sp_executesql
 PRINT 'CREATING AOAG LOGIN'
@@ -59,9 +58,14 @@ FOR DATA_MIRRORING (
 '
 EXEC sp_executesql @cmd
 
-PRINT 'AAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH'
+-- Con esto se pone el modelo a full
+-- ALTER DATABASE [AdventureWorks2019] SET RECOVERY FULL;
+-- GO
+
+PRINT 'GRANTING CONNECT'
 GRANT CONNECT ON ENDPOINT::Hadr_endpoint TO [aoag_login];
 GO
+
 
 --add current node to the availability group
 PRINT 'JOINING AG'
