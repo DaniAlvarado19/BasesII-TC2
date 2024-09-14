@@ -8,7 +8,7 @@ x-service-environment: &common-variables
     HADR_LOGIN_PASSWORD: "Pa$$w0rd123!?*&"
     HADR_CERT_PASSWORD: "Pa$$w0rd1*&23!?"
     HADR_PORT: 5022
-    INIT_WAIT: 20
+    INIT_WAIT: 10
 
 services:
 
